@@ -13,7 +13,7 @@
       <usages-collector id="statistics.lifecycle.project">
         <counts>
           <entry key="project.closed" value="229" />
-          <entry key="project.open.time.0" value="33" />
+          <entry key="project.open.time.0" value="34" />
           <entry key="project.open.time.1" value="10" />
           <entry key="project.open.time.11" value="2" />
           <entry key="project.open.time.12" value="4" />
@@ -47,7 +47,7 @@
           <entry key="project.open.time.59" value="1" />
           <entry key="project.open.time.6" value="1" />
           <entry key="project.open.time.89" value="1" />
-          <entry key="project.opened" value="229" />
+          <entry key="project.opened" value="230" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -56,6 +56,7 @@
           <entry key="csv" value="1" />
           <entry key="html" value="162" />
           <entry key="js" value="2" />
+          <entry key="md" value="2" />
           <entry key="py" value="204" />
         </counts>
       </usages-collector>
@@ -64,6 +65,7 @@
           <entry key="CSS" value="78" />
           <entry key="HTML" value="162" />
           <entry key="JavaScript" value="2" />
+          <entry key="Markdown" value="2" />
           <entry key="PLAIN_TEXT" value="1" />
           <entry key="Python" value="204" />
         </counts>
@@ -74,6 +76,7 @@
           <entry key="css" value="7849" />
           <entry key="html" value="13989" />
           <entry key="js" value="4" />
+          <entry key="md" value="1293" />
           <entry key="py" value="12095" />
         </counts>
       </usages-collector>
@@ -82,6 +85,7 @@
           <entry key="CSS" value="7849" />
           <entry key="HTML" value="13989" />
           <entry key="JavaScript" value="4" />
+          <entry key="Markdown" value="1293" />
           <entry key="Python" value="12108" />
         </counts>
       </usages-collector>
@@ -113,7 +117,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/mysite/translate/templates/translate/translator.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2373">
+            <state relative-caret-position="2884">
               <caret line="206" column="14" selection-start-line="206" selection-start-column="14" selection-end-line="206" selection-end-column="30" />
             </state>
           </provider>
@@ -181,6 +185,9 @@
       <find>original</find>
     </findStrings>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
@@ -227,20 +234,21 @@
         <option value="$PROJECT_DIR$/mysite/personal/static/personal/css/user_login.css" />
         <option value="$PROJECT_DIR$/mysite/translate/static/translate/css/create_content.css" />
         <option value="$PROJECT_DIR$/mysite/personal/templates/personal/user_profile.html" />
+        <option value="$PROJECT_DIR$/README.md" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="683" />
     <option name="width" value="683" />
     <option name="height" value="728" />
   </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -296,6 +304,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -372,10 +381,10 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="683" y="0" width="683" height="728" extended-state="0" />
+    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.48815167" visible="true" weight="0.0883721" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.48815167" visible="true" weight="0.1845238" />
       <window_info id="Structure" order="1" sideWeight="0.51184833" side_tool="true" weight="0.26339287" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -386,7 +395,7 @@
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="8" sideWeight="0.4992248" visible="true" weight="0.26430976" />
+      <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.4992248" visible="true" weight="0.25737706" />
       <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5007752" side_tool="true" weight="0.1969697" />
       <window_info anchor="bottom" id="Python Console" order="10" weight="0.31311476" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -439,13 +448,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/mysite/translate/static/translate/css/timer.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="42" column="24" selection-start-line="42" selection-start-column="24" selection-end-line="42" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/mysite/translate/static/translate/js/main.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="56">
@@ -719,6 +721,13 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/mysite/translate/templates/translate/translator.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2884">
+          <caret line="206" column="14" selection-start-line="206" selection-start-column="14" selection-end-line="206" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/mysite/translate/static/translate/css/translate.css">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1386">
@@ -733,10 +742,13 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/mysite/translate/templates/translate/translator.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2373">
-          <caret line="206" column="14" selection-start-line="206" selection-start-column="14" selection-end-line="206" selection-end-column="30" />
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="126">
+            <caret line="9" column="16" lean-forward="true" selection-start-line="9" selection-start-column="16" selection-end-line="9" selection-end-column="16" />
+          </first_editor>
+          <second_editor />
         </state>
       </provider>
     </entry>
