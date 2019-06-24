@@ -1,0 +1,21 @@
+{% extends "personal/base.html"%}
+{% load crispy_forms_tags %}
+
+{% block javascript %}
+<script>
+
+</script>
+{% endblock %}
+
+
+{% block content %}
+  {% for content in content_to_delete %}
+    <div id="delete-content-main">
+      <form method="POST">
+        {% csrf_token %}
+        <div>Are you sure you want to delete content "{{ content.title }}"?</div>
+        <button class="delete-content-submit" type="submit">Yes, Delete Content</button>
+      </form>
+    </div>
+  {% endfor %}
+{% endblock %}

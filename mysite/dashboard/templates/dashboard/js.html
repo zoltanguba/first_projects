@@ -1,0 +1,240 @@
+<script src="https://d3js.org/d3.v5.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+
+<script>
+
+//This function draws up the Customer Bar chart (used in the corresponding AJAX call on the chart.html template)
+
+  function customerChart (data) {
+    var productData = data.product;
+    var revenueData = data.revenue;
+
+    var width = 580;
+    var height = 500;
+    var padding = 5;
+    var gPadding = 50;
+    var barWidth = ((width - 100) / revenueData.length)
+
+    var Scale = d3.scaleLinear()
+                    .domain([0, d3.max(revenueData)])
+                    .range([0, height-2*gPadding])
+
+    var xScale = d3.scaleLinear()
+                    .domain([0, d3.max(revenueData)])
+                    .range([0, width])
+
+    var yScale = d3.scaleLinear()
+                    .domain([0, d3.max(revenueData)])
+                    .range([height-2*gPadding, 0])
+
+
+    var canvas = d3.select("#dashboard-main2")
+                    .append("svg")
+                    .attr("id", "bar-main")
+                    .attr("width", width)
+                    .attr("height", height)
+
+    var gBar = d3.select("#bar-main")
+                    .append("g")
+                    .attr("id", "bar-container")
+                    .attr("width", width-100)
+                    .attr("height", height-100)
+                    .attr("transform", "translate(50, 0)")
+
+    var bars = gBar.selectAll("rect")
+                    .data(revenueData)
+                    .enter()
+                        .append("rect")
+                        .attr("y", function(d){ return height - Scale(d) - 50 })
+
+                        .attr("width", barWidth - padding)
+                        .attr("transform", function (d, i) {
+                            var translate = [barWidth * i, 0];
+                            return "translate("+ translate + ")";
+                         })
+                         .attr("height", 0)
+                         .transition()
+                         .delay(function (d, i) { return i*400; })
+                         .attr("height", function(d) { return Scale(d) })
+                         .attr("fill", "#c40303");
+
+    var text = gBar.selectAll("text")
+                    .data(revenueData)
+                    .enter()
+                    .append("text")
+                    .transition()
+                    .ease(d3.easeLinear)
+                    .duration(2000)
+                    .text(function(d) {
+                        return d;
+                    })
+                    .attr("y", function(d, i) {
+                        return height - Scale(d) - 60;
+                    })
+                    .attr("x", function(d, i) {
+                        return barWidth * i + barWidth/2;
+                    })
+                    .attr("width", barWidth - padding)
+                    .attr("text-anchor", "middle")
+                    .attr("font-size", "12px")
+
+    var text = gBar.selectAll(".prodlabel")
+                    .data(productData)
+                    .enter()
+                    .append("text")
+                    .transition()
+                    .ease(d3.easeLinear)
+                    .duration(2000)
+                    .attr("class", "prodlabel")
+                    .text(function(d) {
+                        return d;
+                    })
+                    .attr("y", function(d, i) {
+                        return height - 30;
+                    })
+                    .attr("x", function(d, i) {
+                        return barWidth * i + barWidth/2;
+                    })
+                    .attr("width", barWidth - padding)
+                    .attr("text-anchor", "middle")
+                    .attr("font-size", "12px")
+
+    var yAxis = d3.axisLeft(yScale);
+
+    gBar.append("g")
+        .attr("transform", "translate(0, 50)")
+        .call(yAxis)
+  }
+
+//This function draws up the Customer Pie chart (used in the corresponding AJAX call on the chart.html template)
+
+function customerPieChart (data){
+
+    var dataArray = data.combined_list;
+
+    //*** Mouseover function
+    function handleMouseOver(d, i) {
+        d3.select(this).attr("fill", "orange");
+    }
+
+    // Margin and Radius
+    var margin = {top: 20, right: 20, bottom: 20, left: 20},
+        width = 500 - margin.right - margin.left,
+        height = 500 - margin.top - margin.bottom,
+        radius = width/2;
+
+    // Arc generator
+    var arc = d3.arc()
+        .outerRadius(radius - 10)
+        .innerRadius(0);
+
+    // Arc generator for hover
+    var arcOver = d3.arc()
+        .outerRadius(radius - 5)
+        .innerRadius(0);
+
+    var labelArc = d3.arc()
+        .outerRadius(radius - 50)
+        .innerRadius(radius - 50);
+
+    // Pie generator
+    var pie = d3.pie()
+        .sort(null)
+        .value((d) => {return d.revenue})(dataArray);
+
+    // Color scale generator
+    var colorScale = d3.scaleSequential(d3.interpolateRainbow)
+        .domain([0, dataArray.length]);
+
+    // Animating function
+    function pieTween (b) {
+        b.innerRadius = 0;
+        var i = d3.interpolate({startAngle: 0, endAngle: 0}, b);
+        return (t) => { return arc(i(t))};
+    };
+
+    // Define svg
+    var canvas = d3.select("#dashboard-main")
+        .append("svg")
+        .attr("width", width)
+        .attr("height", height)
+        .append("g")
+        .attr("transform", "translate(" + width/2 + "," + height/2 + ")");
+
+    // Create Tooltip variable
+    var tooltip = canvas.append("g")
+        .attr("class", tooltip)
+        .style("display", "none");
+    tooltip.append("text")
+        .attr("x", 15)
+        .attr("dy", "1.2em")
+        .style("font-size", "1.25em")
+        .style("font-weight", "bold");
+
+
+    // Append g elements to canvas
+    var pie2 = canvas.selectAll(".arc")
+        .data(pie)
+        .enter()
+        .append("g")
+        .attr("class", "arc")
+        .attr("id", (d) => {return d.data.customer})
+        .on("mouseenter", function (d) {
+          d3.select(this)
+            .attr("stroke", "black")
+            .transition()
+            .duration(200)
+            .attr("d", arcOver)
+            .attr("stroke-width", 1);
+        })
+        .on("mouseleave", function (d) {
+           d3.select(this).transition()
+             .duration(200)
+             .attr("d", arc)
+             .attr("stroke", "none");
+        })
+        .on('click', function(e) {
+          d3.select("#bar-main").remove();
+          var customer = $(this).attr('id');
+          console.log(customer)
+          $.ajax({
+              txpe: 'GET',
+              url: 'getrebvyprod/',
+              data: {
+                  customer: customer
+              },
+              success: function (data){
+                  customerChart(data)
+              },
+              error: function(error_data){
+                console.log("error")
+                      }
+          });
+
+        })
+
+    // Append the path of the arc
+    var pie3 = pie2.append("path")
+        .attr("d", arc)
+        .attr("id", (d) => {return d.data.customer})
+        .style("fill", (d, i) => { return colorScale(i); })
+        .transition()
+        .ease(d3.easeLinear)
+        .duration(2000)
+        .attrTween("d", pieTween);
+
+    pie2.append("svg:title")
+      .text( (d) => { return d.data.revenue });
+
+    // Append the text (labels)
+    pie2.append("text")
+        .transition()
+        .ease(d3.easeLinear)
+        .duration(2000)
+        .attr("transform", (d) => {return "translate(" + labelArc.centroid(d) + ")" })
+        .attr("dy", ".35em")
+        .text((d) => {return d.data.customer})
+        .attr("text-anchor", "middle");
+}
+
+  </script>

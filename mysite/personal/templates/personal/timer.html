@@ -1,0 +1,124 @@
+{% extends "personal/base.html"%}
+		{% block javascript %}
+			<script>
+			// Set the date we're counting down to
+			var countDownDate = new Date("Jan 5, 2019 15:37:25").getTime();
+
+			// Update the count down every 1 second
+			var x = setInterval(function() {
+
+			  // Get todays date and time
+			  var now = new Date().getTime();
+
+			  // Find the distance between now and the count down date
+			  var distance = countDownDate - now;
+
+			  // Time calculations for days, hours, minutes and seconds
+			  //var months = Math.floor(distance / (1000 * 60 * 60 * 24 * 30));
+			  var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+			  var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+			  var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+			  var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+			  // Display the result in the element with id="timerp"
+			  document.getElementById("timerp").innerHTML = days + "d " + hours + "h "
+			  + minutes + "m " + seconds + "s ";
+
+			  // If the count down is finished, write some text
+			  if (distance < 0) {
+				clearInterval(x);
+				document.getElementById("timerp").innerHTML = "EXPIRED";
+			  }
+			}, 1000);
+
+
+			function myFunction() {
+				var x = document.getElementById("container");
+				if (x.style.display === "none") {
+					x.style.display = "block";
+			  } else {
+				x.style.display = "none";
+				}
+			}
+
+
+
+
+			var y = setInterval(function () {
+				var wDayDate = new Date("Jan 30, 2019 09:00:00").getTime();
+				//var wDayDate = "IDK"
+				if (wDayDate === "IDK") {
+					document.getElementById("wDayTimerp").innerHTML = "We don't know yet :("
+				}
+				else {
+			  var now = new Date().getTime();
+
+			  // Find the distance between now and the count down date
+			  var distance = wDayDate - now;
+
+			  // Time calculations for days, hours, minutes and seconds
+			  //var months = Math.floor(distance / (1000 * 60 * 60 * 24 * 30));
+			  var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+			  var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+			  var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+			  var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+					document.getElementById("wDayTimerp").innerHTML = days + "d " + hours + "h "
+			  + minutes + "m " + seconds + "s "
+				}
+			}
+			)
+
+			$('#timerp').on('mouseover', function() {
+			  var boxId = $(this).attr('id');
+			  $('#'+boxId).fadeOut(400).fadeIn(400);
+			});
+
+			$('#wDayTimerp').on('mouseover', function() {
+			  $('#wDayTimerp').fadeOut(400).fadeIn(400);
+			});
+
+
+
+
+$('.get-request-test').on('click', function() {
+        var wordtocheck = $(this).text();
+        $.ajax({
+            type: 'GET',
+            url: 'wordclass/',
+            data: {
+                'wordtocheck': wordtocheck
+            },
+            success: function(data){
+                if (data.wordexists) {
+            alert("***"+wordtocheck+"***"+" exists in the DB "+data.wordrecord);
+          }
+                else {
+            alert("***"+wordtocheck+"***"+" missing")
+                }
+            }
+        })
+    });
+
+</script>
+{% endblock %}
+
+
+{% block content %}
+
+
+	<div id="containerTimer">
+		<div id="get-request-test-grid">
+			<div class="get-request-test">hur</div>
+			<div class="get-request-test-output"></div>
+			<div class="get-request-test">atombomb</div>
+			<div class="get-request-test-output"></div>
+			<div class="get-request-test">tillbaka</div>
+			<div class="get-request-test-output"></div>
+		</div>
+		<p class="timer-box" id="timerp"></p>
+		<p class="timer-box" id="wDayTimerp"></p>
+	</div>
+
+{% endblock %}
+
+

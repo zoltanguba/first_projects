@@ -1,0 +1,45 @@
+<!doctype html>
+
+<html>
+  <head>
+	<title>Puckos</title>
+	<meta charset="utf-8" />
+	{% load staticfiles %}
+	<link rel="stylesheet" href="{% static 'translate/css/translate.css' %}" type = "text/css"/>
+	<link rel="stylesheet" href="{% static 'personal/css/base.css' %}" type="text/css">
+	<link rel="stylesheet" href="{% static 'personal/css/index.css' %}" type="text/css">
+	<link rel="stylesheet" href="{% static 'translate/css/timer.css' %}" type="text/css">
+	<link rel="stylesheet" href="{% static 'translate/css/list_content.css' %}" type="text/css">
+	<link rel="stylesheet" href="{% static 'translate/css/create_content.css' %}" type="text/css">
+	<link rel="stylesheet" href="{% static 'translate/css/delete_content.css' %}" type="text/css">
+	<link rel="stylesheet" href="{% static 'personal/css/user_login.css' %}" type="text/css">
+	<link rel="stylesheet" href="{% static 'dashboard/css/chart.css' %}" type="text/css">
+	<link rel="stylesheet" href="{% static 'dashboard/css/dashboard.css' %}" type="text/css">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+  </head>
+
+  <body class="fade-in">
+    <!--<div id="main-content-section">-->
+		<div class="header-menu">
+		  <ul>
+			{% if user.is_authenticated %}
+			  <li><a href='/logout'>Logout <i class="fas fa-sign-out-alt"></i></a></li>
+			  <li><a id="username" href="{% url 'profile' user.id %}">{{ user }} <i class="far fa-address-card"></i></a></li>
+			{% endif %}
+			  <li><a href='/index'><i class="fas fa-home"></i></a></li>
+		  </ul>
+		</div>
+
+		<div id="block-content-wrapper">
+		{% block content %}
+		{% endblock %}
+		</div>
+		{% include 'dashboard/js.html' %}
+		{% include 'dashboard/main_dash_js.html' %}
+		{% include 'dashboard/sub_dash_js.html' %}
+    <!--</div>-->
+
+
+    {% block javascript %}{% endblock %}
+  </body>
+</html>

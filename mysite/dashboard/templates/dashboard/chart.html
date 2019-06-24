@@ -1,0 +1,52 @@
+{% extends "personal/base.html"%}
+{% load crispy_forms_tags %}
+
+{% block javascript %}
+  <script>
+
+
+
+//This request passes the Customer-level summary data to the template
+    var endpoint = '/getdata/'
+    var ajax_customer = []
+    var ajax_revenue = []
+    $.ajax({
+      method: 'GET',
+      url: endpoint,
+      success: function(data){
+          customerPieChart(data)
+                },
+        error: function(error_data){
+          console.log("error")
+                }
+    });
+
+//This request passes the Product level data for one Customer to the template
+    $('text').on('click', function(e) {
+    e.preventDefault();
+    var customer = $(this).attr('id');
+    console.log('fasz');
+    $.ajax({
+        txpe: 'GET',
+        url: '/getrebvyprod/',
+        data: {
+            customer: customer
+        },
+        success: function (data){
+            customerChart(data)
+        },
+        error: function(error_data){
+          console.log("error")
+                }
+            })
+    });
+
+  </script>
+
+{% endblock %}
+
+
+{% block content %}
+  <div id="dashboard-main"></div>
+  <div id="dashboard-main2"></div>
+{% endblock %}

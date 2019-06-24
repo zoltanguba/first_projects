@@ -1,0 +1,31 @@
+#dashboard-main {
+    height: 85vh;
+    width: auto;
+    margin-top: 20px;
+    margin-right: 0%;
+    position: relative;
+    float: left;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    text-align: center;
+}
+
+#dashboard-main2 {
+    height: 85vh;
+    width: auto;
+    margin-top: 20px;
+    margin-right: 4%;
+    position: relative;
+    float: right;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    text-align: center;
+}
+
+svg {
+    margin: 0px auto;
+    position: relative;
+    background-color: white;
+}
+
+g {
+
+}

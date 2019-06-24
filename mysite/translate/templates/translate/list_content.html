@@ -1,0 +1,69 @@
+{% extends "personal/base.html"%}
+{% block content %}
+
+  {% if messages %}
+  <ul class="messages">
+      {% for message in messages %}
+      <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+      {% endfor %}
+  </ul>
+  {% endif %}
+
+  <div id="main-listing">
+
+    <div id="main-container-listing">
+
+      <div class="paginator-arrow-left">
+        {% if paginated_libraries.has_previous %}
+          <a class="paginator-arrow" href="?page={{ contacts.previous_page_number }}"><i class="fas fa-angle-left"></i></a>
+        {% elif paginated_libraries.has_next %}
+          <div class="paginator-arrow-inactive"><i class="fas fa-angle-left"></i></div>
+        {% endif %}
+      </div>
+
+      {% for text1 in paginated_libraries %}
+        <div class="content-listing">
+          <p class="library-listing"><a href="#">{{ text1.library }}</a></p>
+          {% for text in content_list %}
+            {% if text.library == text1.library %}
+              <div class="title-listing-container">
+                <p class="title-listing"><a href="{% url 'contentdetail' text.id %}">{{ text.title }}</a></p>
+                <div class="delete-button-listing">
+                  <a href="{% url 'delete' text.id %}"><i class="far fa-trash-alt"></i></a>
+                </div>
+              </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+      {% endfor %}
+      <div class="paginator-arrow-right">
+        {% if paginated_libraries.has_next %}
+          <a class="paginator-arrow" href="?page={{ paginated_libraries.next_page_number }}"><i class="fas fa-angle-right"></i></a>
+        {% elif paginated_libraries.has_previous %}
+          <div class="paginator-arrow-inactive"><i class="fas fa-angle-right"></i></div>
+        {% endif %}
+      </div>
+    </div>
+
+    <div id="upload-listing">
+        <a href="{% url 'newcontent' %}">Upload <i class="fas fa-arrow-circle-up"></i></a>
+    </div>
+
+    <div class="pagination">
+      <span class="step-links">
+          {% if paginated_libraries.has_previous %}
+              <a href="?page=1">&laquo; first</a>
+          {% endif %}
+          <span class="current">
+              Page {{ paginated_libraries.number }} of {{ paginated_libraries.paginator.num_pages }}.
+          </span>
+          {% if paginated_libraries.has_next %}
+              <a href="?page={{ paginated_libraries.paginator.num_pages }}">last &raquo;</a>
+          {% endif %}
+      </span>
+    </div>
+
+
+  </div>
+
+{% endblock %}

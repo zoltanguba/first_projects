@@ -1,0 +1,166 @@
+* {
+	padding:0;
+	margin: 0;
+}
+
+a:link {
+  text-decoration: none;
+}
+
+a:visited {
+  text-decoration: none;
+}
+
+li {
+    list-style: none;
+}
+
+.messages{
+    width: 40%;
+    margin: 0px 65% 0px 35%;
+    color: green;
+}
+
+.success{
+    margin: 0px auto;
+    color: green;
+    text-align: center;
+}
+
+body {
+	height: 100%;
+	background-color: #b1b1b1;
+}
+
+.header-menu {
+	height: 8vh;
+	width: 100vw;
+	<!--background-color: #9e3535;-->
+	padding: 0;
+	margin-bottom: 0px;
+	position: relative;
+	transition: all 2s ease;
+	background-color: #76a1ef;
+}
+
+.header-menu-hide {
+
+	opacity: 0;
+
+}
+
+.header-menu ul li {
+	float: right;
+	list-style: none;
+	margin: 1.5vh 2vw;
+}
+
+.header-menu ul li a {
+	color: white;
+	font-size: 1vw;
+}
+
+.header-menu-clicked ul li {
+	float: right;
+	list-style: none;
+	margin: 1.5vh 2vw;
+}
+
+.header-menu-clicked ul li a {
+	color: white;
+	font-size: 1vw;
+}
+
+.fa-home{
+    font-size: 2rem;
+}
+
+#sidebar {
+	height: 100vh;
+	width: 11vw;
+	position: relative;
+	float: left;
+}
+
+#sidebar-list-container{
+	position: relative;
+	width: 100px;
+}
+
+#sidebar ul li {
+	list-style: none;
+	padding: 3vh 1vw;
+	font-size: 1vw;
+}
+
+.menu-minimal{
+    width: 200px;
+    display: flex;
+    flex-direction: row;
+}
+
+.menu-minimal a {
+	color: white;
+	border: 0.1vw solid white;
+	padding: 0.5vh 0.5vw;
+	margin: 2%;
+}
+
+#block-content-wrapper{
+    height: 94vh;
+    width: 100vw;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.fade-in {
+  animation: fadeIn ease 2s;
+  -webkit-animation: fadeIn ease 2s;
+  -moz-animation: fadeIn ease 2s;
+  -o-animation: fadeIn ease 2s;
+  -ms-animation: fadeIn ease 2s;
+}
+
+
+@keyframes fadeIn{
+  0% {
+    opacity:0;
+  }
+  100% {
+    opacity:1;
+  }
+}
+
+@-moz-keyframes fadeIn {
+  0% {
+    opacity:0;
+  }
+  100% {
+    opacity:1;
+  }
+}
+
+@-webkit-keyframes fadeIn {
+  0% {
+    opacity:0;
+  }
+  100% {
+    opacity:1;
+  }
+}
+
+@-o-keyframes fadeIn {
+  0% {
+    opacity:0;
+  }
+  100% {
+    opacity:1;
+  }
+}
+
+@-ms-keyframes fadeIn {
+  0% {
+    opacity:0;
+  }

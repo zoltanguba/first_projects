@@ -1,0 +1,82 @@
+{% extends "personal/base.html"%}
+  {% block javascript %}
+
+    <script>
+      var text2 = "I am Puckos",
+          text3 = "Send me donuts";
+      $(document).on('click', ".menu-item", function(event){
+        event.preventDefault();
+
+        $('.app-link').remove();
+        $('.content-window-wrapper').text("");
+        $(this).removeClass('menu-item');
+        $(this).addClass('menu-item-clicked');
+
+        $('.menu-item').toggleClass('spin');
+
+        var linkUrl = $(this).attr('href');
+        setTimeout(function(url) { window.location = url; }, 1000, linkUrl);
+
+        var contentid = $(this).attr("id")
+        if (contentid == "1") {
+          $('.content-window-wrapper').append('<a class="app-link" href="/contentlist"><span>Translator</span></a>');
+          $('.content-window-wrapper').append('<a class="app-link" href="/dashboard/"><span>Dashboard</span></a>');
+        }
+        else if (contentid == "2") {
+          $('.content-window-wrapper').text(text2);
+        }
+        else {
+          $('.content-window-wrapper').text(text3);
+        }
+
+        $('.content-window-wrapper').animate({
+			opacity: 1}, 2500);
+      });
+
+      $(document).on('click', ".menu-item-clicked", function(event){
+        event.preventDefault();
+        $(this).removeClass('menu-item-clicked');
+
+        $('.menu-item').toggleClass('spin');
+
+        $(this).addClass('menu-item');
+        $('.content-window-wrapper').animate({opacity: 0}, 1000);
+
+
+      });
+
+
+
+    </script>
+
+  {% endblock %}
+
+  {% block content %}
+    <div class="index-wrapper">
+      <div class="index-menu-wrapper">
+        <div class="menu-item-wrapper left">
+          <a href='#' id="1" class="menu-item"><span>Projects</span></a>
+        </div>
+        <div class="menu-item-wrapper middle">
+          <a href='#' id="2" class="menu-item"><span>About Me</span></a>
+        </div>
+        <div class="menu-item-wrapper right">
+          <a href='#' id="3" class="menu-item"><span>Contact</span></a>
+        </div>
+      </div>
+      <div class="content-window-wrapper"></div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  {% endblock %}

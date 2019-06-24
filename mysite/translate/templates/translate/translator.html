@@ -1,0 +1,232 @@
+{% extends "personal/base.html"%}
+{% load crispy_forms_tags %}
+
+{% block javascript %}
+
+<script>
+//This request gives the knownlevel values to the words when the page is loaded
+
+      $(document).ready(function(){
+        $("span").each(function() {
+            var wordtocheck = $(this).text();
+            var srcLanguage = $('#word-original-data-value').text();
+            var spantoclassify = $(this)
+            $.ajax({
+                type: 'GET',
+                url: 'wordclass/',
+                data: {
+                    'wordtocheck': wordtocheck,
+                    'srcLanguage': srcLanguage
+                },
+                success: function(data){
+                    if (data.wordexists) {
+                         $(spantoclassify).removeClass();
+                         $(spantoclassify).addClass("word-known-level-"+data.knownlevel);
+              }
+                    else {
+                         $(spantoclassify).removeClass();
+                         $(spantoclassify).addClass("word-known-level-unknown");
+                    };
+                }
+            })
+        //This is the end of the loop
+        })
+      })
+
+//Pass the content word's text clicked on to the original word field AND check if the word exists in the database AND create the Google Translate link AND add the translation suggestions to the DOM
+
+    $('span').on('click', function(e) {
+      e.preventDefault();
+      $("input:text").val("");
+      var wordtocheck = $(this).text();
+      var srcLanguage = $('#word-original-data-value').text();
+
+      var googlelink = "https://translate.google.hu/#view=home&op=translate&sl={{ Translate.language }}&tl=en&text="+wordtocheck
+      $("#google").attr("href", googlelink);
+
+	  $('#word-original').text(wordtocheck);
+	  $('#hidden-visible-toggle').removeClass();
+      $('#hidden-visible-toggle').addClass('visible');
+      $.ajax({
+        type: 'GET',
+        url: 'wordclass/',
+        data: {
+            'wordtocheck': wordtocheck,
+            'srcLanguage': srcLanguage
+        },
+        success: function(data){
+            if (data.wordexists) {
+                $('button').removeClass();
+                $('#'+data.knownlevel).addClass('button-known-level-'+data.knownlevel);
+                $('#translation-input').val(data.translatedWord1);
+                $('#container').removeClass();
+                $('#container').addClass('container-known');
+                $('.word-translation-loop').remove();
+            }
+            else if (data.translatedWord1){
+                $('.word-translation-loop').remove();
+
+                for (i=0; i < data.translatedWord1.length; i++) {
+
+                  $('#word-translation-container').append('<div class="word-translation word-translation-loop">'+i+'</div>');
+
+                  $('.word-translation-loop').each(function () {
+                    if ($(this).text() == i ) {
+                      $(this).text(data.translatedWord1[i]);
+                    }
+                  })
+
+                }
+            }
+            else {
+                $('.word-translation-loop').remove();
+
+                $('#word-translation-container').append('<div class="word-translation-loop">There is no suggestion for this word</div>');
+                $('button').removeClass();
+                $('#container').removeClass();
+                $('#container').addClass('container-unknown');
+            };
+        }
+        })
+      });
+
+//Hide the translator options when the user is clicking on anything but the span tags
+
+    $('body').click(function(e){
+      var target = $(e.target);
+      if((target).is('span')) {}
+      else if ((target).is('#content-main')){
+        $('button').removeClass();
+        $('#hidden-visible-toggle').removeClass();
+        $('#hidden-visible-toggle').addClass('hidden');
+        }
+
+      else {}
+    });
+
+//Pass the translation option text value to the translation input field
+
+    $('.word-translation').on('click', function() {
+      var trans = $(this).text();
+	  $("input:text").val(trans);
+    });
+
+    $('#word-translation-container').on('click', '.word-translation', function() {
+      var trans = $(this).text();
+	  $("input:text").val(trans);
+    });
+
+//Ajax POST request to save the data provided to the "Word database" model + UPDATE word knownlevel classes
+
+    $('button').on('click', function(e){
+        e.preventDefault();
+        var knownlevel = $(this).attr("value")
+
+        if ($('#translation-input').val() == "") {
+            alert("No translation provided");
+        }
+        else {
+        $.ajax({
+            type: 'POST',
+            url: 'word/',
+            data: {
+                srcLanguage: $('#word-original-data-value').text(),
+                word: $('#word-original').text(),
+                translatedWord: $('#translation-input').val(),
+                knownlevel: $(this).attr("value"),
+                csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
+            },
+            success: function(){
+              $('#container').addClass('container-known');
+              $('#'+knownlevel).addClass('button-known-level-'+knownlevel);
+            }
+            // End of AJAX call
+        });
+        }
+
+
+
+        $("span").each(function() {
+            var wordtocheck = $(this).text();
+            var srcLanguage = $('#word-original-data-value').text()
+            var spantoclassify = $(this)
+            $.ajax({
+                type: 'GET',
+                url: 'wordclass/',
+                data: {
+                    'wordtocheck': wordtocheck,
+                    'srcLanguage': srcLanguage
+                },
+                success: function(data){
+                    if (data.wordexists) {
+                         $(spantoclassify).removeClass();
+                         $(spantoclassify).addClass("word-known-level-"+data.knownlevel);
+              }
+                    else {
+                         $(spantoclassify).removeClass();
+                         $(spantoclassify).addClass("word-known-level-unknown");
+                    };
+                }
+            })
+        //This is the end of the loop
+        })
+    });
+
+
+
+  </script>
+
+{% endblock %}
+{% block content %}
+
+    <div id ="main">
+      <div id="content-main">
+        <div id="content-title">
+          <h3>{{ Translate.title }}</h3>
+          <p id="content-id"></p>
+        </div>
+        <div id="content">
+          {% for word in Translate.content.split %}
+
+              <span>{{ word }}</span>
+
+          {% endfor %}
+        </div>
+      </div>
+      <div id="container" class="container-unknown">
+        <div id="hidden-visible-toggle" class="hidden">
+
+          <div id="word-original">Click on a word to begin</div>
+          <div id="source-language">
+            <div class="data-label">Source Language:</div>
+            <div id="word-original-data-value">{{ Translate.language }}</div>
+          </div>
+
+          <div id="translation-options">
+            <form method='POST' id ='translation-form'>
+              {% csrf_token %}
+              <input id="translation-input" type="text">
+
+              <div id="word-translation-container">
+                <a id="google" class="word-translation-google" target="_blank" rel="noopener noreferrer" href="https://translate.google.hu/#view=home&op=translate&sl={{ Translate.language }}&tl=en&text={{ word }}">Google Translate</a>
+              </div>
+
+              <div class="translation-save-buttons">
+                <button id="1" type="submit" value="1">1</button>
+                <button id="2" type="submit" value="2">2</button>
+                <button id="3" type="submit" value="3">3</button>
+                <button id="4" type="submit" value="4">4</button>
+                <button id="5" type="submit" value="5">5</button>
+                <button id="known" type="submit" value="known">6</button>
+                <button id="unknown" type="submit" value="unknown">7</button>
+              </div>
+
+            </form>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+{% endblock %}
+

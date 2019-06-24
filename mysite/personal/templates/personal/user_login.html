@@ -1,0 +1,25 @@
+{% extends "personal/base.html"%}
+{% load crispy_forms_tags %}
+
+{% block javascript %}
+<script>
+
+</script>
+{% endblock %}
+
+
+{% block content %}
+    <div id="login-main">
+      <form method="POST" id="login-form">
+        {% csrf_token %}
+        <fieldset id="login-fieldset">
+          {{ form|crispy }}
+        </fieldset>
+        <div class="create-user-button-container">
+          <button class="create-user-button" type="submit"><a>Login</a></button>
+          <button class="create-user-button"><a href="{% url 'contentlist' %}">Cancel</a></button>
+          <button class="create-user-button" type="submit"><a href='/register'>Register</a></button>
+        </div>
+      </form>
+    </div>
+{% endblock %}

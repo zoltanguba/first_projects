@@ -1,0 +1,31 @@
+{% extends "personal/base.html"%}
+{% load crispy_forms_tags %}
+
+{% block javascript %}
+
+  <script>
+$(document).ready(function(){
+      $("#id_username").val("");
+      $("#id_email").val("");
+      $("#id_email2").val("");
+      $("#id_password").val("");
+    })
+  </script>
+
+{% endblock %}
+
+
+{% block content %}
+    <div id="login-main">
+      <form method="POST" id="login-form">
+        {% csrf_token %}
+        <fieldset id="login-fieldset">
+          {{ form|crispy }}
+        </fieldset>
+        <div class="create-user-button-container">
+          <button class="create-user-button" type="submit">Register</button>
+          <button class="create-user-button"><a href="{% url 'contentlist' %}">Cancel</a></button>
+        </div>
+      </form>
+    </div>
+{% endblock %}

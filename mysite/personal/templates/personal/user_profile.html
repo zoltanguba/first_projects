@@ -1,0 +1,35 @@
+{% extends "personal/base.html"%}
+{% load crispy_forms_tags %}
+
+{% block javascript %}
+
+  <script>
+
+  </script>
+
+{% endblock %}
+
+
+{% block content %}
+    <div id="login-main">
+
+        <form method="POST" id="login-form">
+          {% csrf_token %}
+          <fieldset id="login-fieldset">
+            <div class="current-email">Your current e-mail address is "{{ user.email }}"</div>
+              {{ user_form|crispy }}
+
+              {% for language in destLanguage %}
+            <div class="current-destlanguage">Your current destination language is "{{ language.destLanguage }}"</div>
+              {% endfor %}
+
+              {{ language_form|crispy }}
+          </fieldset>
+          <div class="create-user-button-container">
+            <button class="create-user-button" type="submit"><span>Update</span></button>
+            <button class="create-user-cancel create-user-button" href="{% url 'contentlist' %}"><span>Cancel</span></button>
+          </div>
+        </form>
+
+    </div>
+{% endblock %}

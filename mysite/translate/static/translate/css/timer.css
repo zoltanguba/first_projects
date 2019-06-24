@@ -1,0 +1,45 @@
+* {
+	padding:0;
+	margin: 0;
+}
+
+
+#containerTimer {
+    height: 80%;
+    width: 80%;
+    background-color: blue;
+    position: relative;
+    float: right;
+}
+
+#timerp {
+	color: white;
+	background-color: purple;
+	width: 200px;
+	height: 20%;
+    position: absolute;
+}
+
+#wDayTimerp{
+	color: white;
+	background-color: red;
+	width: 200px;
+	height: 20%;
+    float: right;
+
+}
+
+#get-request-test-grid {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-gap: 5px;
+    gri-gap-color: white;
+}
+
+.get-request-test{
+    background-color: grey;
+}
+
+.get-request-test-output{
+    background-color: grey;
+}

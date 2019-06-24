@@ -1,0 +1,167 @@
+* {
+	padding:0;
+	margin: 0;
+}
+
+a:link {
+  text-decoration: none;
+
+}
+
+a:visited {
+  text-decoration: none;
+}
+
+#main-listing {
+    height: 80vh;
+    width: 60%;
+    background-color: #e0e0e0;
+    position: relative;
+    float: right;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    text-align: center;
+}
+
+.paginator-arrow-left{
+    height: 100%;
+    width: 7%;
+    background-color: #e0e0e0;
+    float: left;
+
+}
+
+.paginator-arrow-right{
+    height: 100%;
+    width: 7%;
+    background-color: #e0e0e0;
+    float: right;
+}
+
+.paginator-arrow{
+    width: 7%;
+    font-size: 6VW;
+    font-weight: bold;
+    background-color: #9099A2;
+    color: #e0e0e0;
+    vertical-align: middle;
+    position: absolute;
+    padding: auto;
+    top: 45%;
+    transform: translateY(-50%);
+    transition:color .1s ease-out, background .1s ease-in;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.paginator-arrow:hover {
+    background-color: #c40303;
+}
+
+.paginator-arrow-inactive{
+    width: 7%;
+    font-size: 6VW;
+    font-weight: bold;
+    background-color: #e0e0e0;
+    vertical-align: middle;
+    position: absolute;
+    padding: auto;
+    top: 45%;
+    transform: translateY(-50%);
+    color: #e0e0e0;
+}
+
+#main-container-listing{
+    height: 92%;
+    width: 100%;
+    margin: 0px auto;
+    vertical-align: text-top;
+
+}
+
+.content-listing {
+    width: 20%;
+    height: 90%;
+    background-color: white;
+    margin-top: 2%;
+    display: inline-block;
+    vertical-align:top;
+}
+
+.library-listing{
+    font-size: 1.5VW;
+    font-weight: bold;
+    padding-top: 3%;
+    padding-bottom: 3%;
+    margin-bottom: 8%;
+    background-color: #9099A2;
+}
+
+.title-listing-container{
+    display: grid;
+    grid-template-columns: 70% 30%;
+    margin-top: 3%;
+    padding: 3%;
+    background-color: #f4f4f4;
+    transition:color .2s ease-out, background .2s ease-in;
+
+}
+
+
+.title-listing-container:hover {
+    background-color: #c40303;
+}
+
+.title-listing-container a:hover {
+    color: white;
+}
+
+.title-listing-container a {
+    font-size: 1.3VW;
+}
+
+.title-listing{
+    font-size: 5px;
+    height: 20%;
+    margin-top: 1%;
+    margin-bottom: 1%;
+    font-size: 1VW;
+}
+
+.title-distinct-library{
+    height:50%;
+    background-color: pink;
+}
+
+#upload-listing{
+    height: 8%;
+    width: 100%;
+    background-color: white;
+    border-radius: 5px;
+    position: absolute;
+    bottom: 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+#upload-listing a {
+    height: 90%;
+    background-color: #c40303;
+    border-radius: 30px;
+    color: white;
+    line-height: 31px;
+    width: 15%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.delete-button-listing{
+
+    position: relative;
+
+}

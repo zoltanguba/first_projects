@@ -1,0 +1,494 @@
+<script src="https://d3js.org/d3.v5.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+
+<script>
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////// MAIN DASHBOARD SCRIPTS /////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//////////////////////// Yearly Summary Barchart ////////////////////////
+    function yearlySummaryBarChart(data) {
+// Pulling in the raw data and converting it to the necessary structure
+      var revenue_data = data.rev_by_month
+
+
+      var months_generated = [];
+      var rev_generated = [];
+      var cos_generated = [];
+
+      revenue_data.forEach((d) => {
+        months_generated.push(d['month']);
+        rev_generated.push(d['revenue']);
+      });
+
+
+
+// Setting up the dimensions and scales
+      var width = 420;
+      var height = 240;
+      var padding = 4;
+      var barWidth = width/(revenue_data.length) - padding;
+      var positionMargin = 40;
+      var heightMargin = 39;
+
+      var Scale = d3.scaleLinear()
+        .domain([0, d3.max(rev_generated)])
+        .range([0, height-positionMargin])
+
+      var yScale = d3.scaleLinear()
+        .domain([0, d3.max(rev_generated)])
+        .range([height-positionMargin, 0])
+
+// Appending the graphical elements
+      var svg = d3.select('#yearlysummary')
+        .append('svg')
+        .attr('id', 'svg-yearlysummary')
+        .attr('width', width)
+        .attr('height', height)
+
+      var g = d3.select('#svg-yearlysummary')
+        .append('g')
+        .attr('id', 'g-yearlysummary')
+        .attr('width', width-10)
+        .attr('height', height-10)
+        .attr('transform', 'translate(10, 20)')
+
+// Append REVENUE bars
+      var bar = g.selectAll('rect')
+        .data(revenue_data)
+        .enter()
+        .append('rect')
+          .on("mouseenter", function (d) {d3.select(this).attr("stroke", "#c40303")}).attr("stroke-width", 3)
+          .on("mouseleave", function (d) {d3.select(this).attr("stroke", "none")})
+          .on('click', monthClick)
+        .attr('id', (d) => { return d.month })
+        .attr('y', function(d){ return height - Scale(d.revenue) - positionMargin})
+        .attr("width", barWidth - padding)
+        .attr("transform", function (d, i) {
+            var translate = [(barWidth * i) + (20), 0];
+            return "translate("+ translate + ")";})
+        .attr("height", 0)
+        .transition()
+            .delay(function (d, i) { return i*400; })
+            .attr("height", function(d) { return Scale(d.revenue) })
+        .attr("fill", "#c40303");
+
+
+//Appending the data labels
+      var label = g.selectAll('.rev-label-yearlysummary')
+        .data(rev_generated)
+        .enter()
+        .append('text')
+        .transition()
+          .ease(d3.easeLinear)
+          .duration(2000)
+        .style('font', '9px times')
+        .attr('class', 'rev-label-yearlysummary')
+        .attr("text-anchor", "middle")
+        .text((d) => {return d;})
+        .attr('x', function(d, i) { return ((barWidth * i) + 20 + barWidth/2 - padding) })
+        .attr('y', function(d){ return height - Scale(d) - 1.2 * positionMargin})
+
+
+
+//Appending the scale and the month labels
+        var yAxis = d3.axisLeft(yScale);
+
+        g.append('g')
+          .style("font", "7px times")
+          .attr('transform', 'translate(20, 0)')
+          .call(yAxis)
+
+        var text = g.selectAll('.month-label-yearlysummary')
+          .data(months_generated)
+          .enter()
+          .append('text')
+          .transition()
+            .ease(d3.easeLinear)
+            .duration(2000)
+          .style("font", "9px times")
+          .attr('class', 'month-label-yearlysummary')
+          .attr("text-anchor", "middle")
+          .text((d) => {return d;})
+          .attr('y', function(d, i) { return height - 20 })
+          .attr('x', function(d, i) { return ((barWidth * i) + 20 + barWidth/2 - padding) });
+
+
+
+
+
+//////////////////////// Yearly Summary Data Table ////////////////////////
+
+// Populating the Revenue row in the summary tabe
+        var i = 0;
+        $(".yearlytable-rev-cell").each(function() {
+            if (typeof rev_generated[i] !== 'undefined') {
+                $(this).children().text("$" + rev_generated[i]);
+                i += 1;
+            }
+            else {
+                $(this).children().text("-");
+                i += 1;
+            };
+        });
+
+        var j = 0;
+        $(".yearlytable-cos-cell").each(function() {
+            if (typeof cos_generated[j] !== 'undefined') {
+                $(this).children().text("$" + cos_generated[j]);
+                j += 1;
+            }
+            else {
+                $(this).children().text("-");
+                j += 1;
+            };
+        });
+
+        var k = 0;
+        $(".yearlytable-gm-cell").each(function() {
+            if (typeof gm_generated[k] !== 'undefined') {
+                $(this).children().text("$" + gm_generated[k]);
+                k += 1;
+            }
+            else {
+                $(this).children().text("-");
+                k += 1;
+            };
+        });
+
+    }
+
+//////////////////////// SalesPerson Barchart ////////////////////////
+
+    function yearlySummarySalesPersonChart(data) {
+// Pulling in the raw data and converting it to the necessary structure
+      var revenue_data = data.data;
+
+      var salesperson_generated = [];
+      var rev_generated = [];
+
+
+      revenue_data.forEach((d) => {
+        salesperson_generated.push(d['salesperson']);
+        rev_generated.push(d['revenue']);
+      });
+
+
+// Setting up the dimensions and scales
+      var width = 400;
+      var height = 240;
+      var padding = 30;
+      var barWidth = width/(revenue_data.length);
+      var positionMargin = 40;
+      var heightMargin = 20;
+
+      var Scale = d3.scaleLinear()
+        .domain([0, d3.max(rev_generated)])
+        .range([0, height-positionMargin])
+
+      var yScale = d3.scaleLinear()
+        .domain([0, d3.max(rev_generated)])
+        .range([height - positionMargin, 0])
+
+// Appending the graphical elements
+      var svg = d3.select('#salespersonsummary')
+        .append('svg')
+        .attr('id', 'svg-salespersonsummary')
+        .attr('width', width)
+        .attr('height', height)
+
+      var g = d3.select('#svg-salespersonsummary')
+        .append('g')
+        .attr('id', 'g-salespersonsummary')
+        .attr('width', width-20)
+        .attr('height', height-20)
+        .attr('transform', 'translate(10, 10)')
+
+// Append REVENUE bars
+      var bar = g.selectAll('rect')
+        .data(revenue_data)
+        .enter()
+        .append('rect')
+          .on("mouseenter", function (d) {d3.select(this).attr("stroke", "#c40303")}).attr("stroke-width", 3)
+          .on("mouseleave", function (d) {d3.select(this).attr("stroke", "none")})
+          .on('click', salesClick)
+        .attr('id', (d) => { return d.salesperson })
+        .attr('y', function(d){ return height - Scale(d.revenue)-positionMargin})
+        .attr("width", barWidth - padding)
+        .attr("transform", function (d, i) {
+            var translate = [barWidth * i + 20, 20];
+            return "translate("+ translate + ")";})
+        .attr("height", 0)
+        .transition()
+          .delay(function (d, i) { return i*400; })
+          .attr("height", function(d) { return Scale(d.revenue) })
+        .attr("fill", "#c40303");
+
+//Appending the data labels
+      var label = g.selectAll('.rev-label-salespersonsummary')
+        .data(rev_generated)
+        .enter()
+        .append('text')
+        .transition()
+          .ease(d3.easeLinear)
+          .duration(2000)
+        .style('font', '9px times')
+        .attr('class', 'rev-label-salespersonsummary')
+        .attr("text-anchor", "middle")
+        .text((d) => {return d;})
+        .attr('x', function(d, i) { return (barWidth * i + 55) })
+        .attr('y', function(d){ return height - Scale(d) - 0.7 * positionMargin})
+
+//Appending the scale and the salesperson labels
+        var yAxis = d3.axisLeft(yScale);
+
+        g.append('g')
+        .style("font", "7px times")
+        .attr('transform', 'translate(20, 20)')
+        .call(yAxis)
+
+        var text = g.selectAll('.label-salespersonsummary')
+        .data(salesperson_generated)
+        .enter()
+        .append('text')
+        .style("font", "10px times")
+        .attr('class', 'label-salespersonsummary')
+        .text((d) => {return d;})
+        .attr('y', function(d, i) { return height - 10 })
+        .attr('x', function(d, i) { return (barWidth * i + 55) })
+        .attr("text-anchor", "middle");
+}
+
+//////////////////////// Monthly data table ////////////////////////
+    function monthlyTable(data){
+        var act_rev = data.revenue[0]['actual_rev'],
+            mom_rev = data.revenue[1]['mom_rev'],
+            yoy_rev = data.revenue[2]['yoy_rev'];
+
+
+
+        if (typeof act_rev !== 'undefined') {
+            $('.monthlytable-rev-act').children().text("$" + act_rev);
+        }
+        else {
+            $('.monthlytable-rev-act').children().text("-");
+        };
+        $('.monthlytable-rev-mom').children().text(mom_rev + "%");
+        $('.monthlytable-rev-yoy').children().text(yoy_rev + "%");
+
+        $('.monthlytable-label-cell').children().text(data.year + " - " + data.month);
+        $('#main-dashboard-title').text(data.year);
+    }
+//////////////////////// Customer Piechart ////////////////////////
+
+    function customerChartYearly (data) {
+
+      // Raw data processing
+      var revenue_data = data.rev_yearly
+
+      var customers_generated = [];
+      var rev_generated = [];
+
+      revenue_data.forEach((d) => {
+        customers_generated.push(d['Customer']);
+        rev_generated.push(d['Revenue']);
+      });
+
+      console.log(customers_generated);
+      console.log(rev_generated);
+
+      // Margin and Radius
+      var margin = {top: 20, right: 20, bottom: 20, left: 20},
+          width = 300 - margin.right,
+          height = 240 - margin.top,
+          radius = height/2;
+
+      // Arc generator
+      var arc = d3.arc()
+        .outerRadius(radius - 10)
+        .innerRadius(radius - 60);
+
+      // Arc generator for hover
+      var arcOver = d3.arc()
+        .outerRadius(radius - 10)
+        .innerRadius(radius - 65);
+
+      // Arc generator for data labels
+      var labelArc = d3.arc()
+        .outerRadius(radius - 30)
+        .innerRadius(radius - 30);
+
+      // Pie generator
+      var pie = d3.pie()
+        .sort(null)
+        .value((d) => {return d.Revenue})(revenue_data);
+
+      // Color scale generator
+      var colorScale = d3.scaleSequential(d3.interpolateRainbow)
+        .domain([0, customers_generated.length]);
+
+      // Animating function
+    function pieTween (b) {
+        b.innerRadius = 0;
+        var i = d3.interpolate({startAngle: 0, endAngle: 0}, b);
+        return (t) => { return arc(i(t))};
+    };
+
+      // Define svg
+      var svg = d3.select("#customer-yearly")
+        .append('svg')
+        .attr('id', 'svg-yearlycustomer')
+        .attr('width', width)
+        .attr('height', height)
+        .attr('transform', 'translate(0, 10)');
+
+      // Append g elements to canvas
+      var pie = svg.selectAll(".arc")
+        .data(pie)
+        .enter()
+        .append("g")
+        .attr("class", "arc")
+        .attr("id", (d) => {return d.data.Customer})
+        .attr('transform', 'translate(140, 110)')
+        .on("mouseenter", function (d) {
+          d3.select(this)
+            .attr("stroke", "black")
+            .transition()
+            .duration(200)
+            .attr("d", arcOver)
+            .attr("stroke-width", 1);
+        })
+        .on("mouseleave", function (d) {
+           d3.select(this).transition()
+             .duration(200)
+             .attr("d", arc)
+             .attr("stroke", "none");
+        })
+        .on('click', customerClick)
+
+      // Append the path of the arc
+      var path = pie.append("path")
+        .attr("d", arc)
+        .style("fill", (d, i) => { return colorScale(i); })
+        .transition()
+        .ease(d3.easeLinear)
+        .duration(2000)
+        .attrTween("d", pieTween);
+
+      pie.append("svg:title")
+        .text((d) => { return d.data.Revenue });
+
+      pie.append("text")
+        .transition()
+        .ease(d3.easeLinear)
+        .duration(2000)
+        .attr("transform", (d) => {return "translate(" + labelArc.centroid(d) + ")" })
+        .attr("dy", ".35em")
+        .text((d) => {return d.data.Customer})
+        .attr("text-anchor", "middle")
+        .attr("font-size", "12px");
+
+    }
+//////////////////////// Product Barchart ////////////////////////
+
+    function productChartYearly (data){
+      var revenue_data = data.product_rev_yearly;
+
+      var product_generated = [];
+      var rev_generated = [];
+
+
+      revenue_data.forEach((d) => {
+        product_generated.push(d['Product']);
+        rev_generated.push(d['Revenue']);
+      });
+
+      // Setting up the dimensions and scales
+      var width = 310;
+      var height = 245;
+      var padding = 10;;
+      var positionMargin = 25;
+      var heightMargin = 20;
+      var barHeight = (height - positionMargin)/(revenue_data.length)
+
+      var Scale = d3.scaleLinear()
+        .domain([0, d3.max(rev_generated)])
+        .range([0, width - 3 * positionMargin])
+
+      var xScale = d3.scaleLinear()
+        .domain([0, d3.max(rev_generated)])
+        .range([0, width - 3 * positionMargin ])
+
+      // Appending the graphical elements
+      var svg = d3.select('#product-yearly')
+        .append('svg')
+        .attr('id', 'svg-product-yearly')
+        .attr('width', width)
+        .attr('height', height)
+
+      var g = d3.select('#svg-product-yearly')
+        .append('g')
+        .attr('id', 'g-product-yearly')
+        .attr('width', width-20)
+        .attr('height', height-20)
+        .attr('transform', 'translate(' + 1.5*positionMargin + ', 10)')
+
+// Append REVENUE bars
+      var bar = g.selectAll('rect')
+        .data(revenue_data)
+        .enter()
+        .append('rect')
+          .on("mouseenter", function (d) {d3.select(this).attr("stroke", "#c40303")}).attr("stroke-width", 3)
+          .on("mouseleave", function (d) {d3.select(this).attr("stroke", "none")})
+          .on('click', productClick)
+        .attr('id', (d) => { return d.Product })
+        .attr('height', barHeight - padding )
+        .attr('y', function(d, i){ return barHeight * i})
+        .attr("width", 0)
+        .transition()
+          .delay(function (d, i) { return i*400; })
+          .attr('width', function(d) { return Scale(d.Revenue) })
+        .attr("fill", "#c40303");
+
+//Appending the data labels
+      var label = svg.selectAll('.rev-label-product')
+        .data(rev_generated)
+        .enter()
+        .append('text')
+        .transition()
+          .ease(d3.easeLinear)
+          .duration(2000)
+        .style('font', '9px times')
+        .attr('class', 'rev-label-product')
+        .attr("text-anchor", "middle")
+        .text((d) => {return d})
+        .attr('x', function(d) { return width - 25 })
+        .attr('y', function(d, i){ return barHeight * i + 27});
+
+//Appending the scale and the product labels
+      var xAxis = d3.axisBottom(xScale);
+      g.append('g')
+        .style("font", "7px times")
+        .attr('transform', 'translate(0, 220)')
+        .call(xAxis)
+
+      var text = svg.selectAll('.label-product-yearly')
+        .data(product_generated)
+        .enter()
+        .append('text')
+        .transition()
+          .ease(d3.easeLinear)
+          .duration(2000)
+        .style("font", "10px times")
+        .attr('class', 'label-product-yearly')
+        .text((d) => {return d})
+        .attr('x', 10)
+        .attr('y', function(d, i){ return barHeight * i + 27})
+    }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////// SUB-DASHBOARD SCRIPTS /////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+</script>

@@ -1,0 +1,27 @@
+{% extends "personal/base.html"%}
+{% load crispy_forms_tags %}
+
+{% block javascript %}
+<script>
+
+</script>
+{% endblock %}
+
+
+{% block content %}
+
+
+
+    <div id="create-content-main">
+      <form method="POST" id="create-content-form">
+        {% csrf_token %}
+        <fieldset>
+          {{ form|crispy }}
+        </fieldset>
+        <div class="create-content-button-container">
+          <button class="create-content-button" type="submit">Save New Content</button>
+          <a class="create-content-cancel create-content-button" href="{% url 'contentlist' %}">Cancel</a>
+        </div>
+      </form>
+    </div>
+{% endblock %}

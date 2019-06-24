@@ -1,0 +1,282 @@
+{% extends "personal/base.html"%}
+{% load crispy_forms_tags %}
+
+{% block javascript %}
+
+<script>
+var defaultYear = 2019;
+
+  $(document).ready(function(){
+
+    //This request passes the yearly summary data to the dashboard template
+    var url = 'main_dashboard_data/'
+
+    $.ajax({
+      method: 'GET',
+      url: url,
+      data: {
+             'year': defaultYear
+             },
+      success: function(data){
+                  yearlySummaryBarChart(data)
+                  var years = data.distinct_years_list;
+                  var months = data.distinct_months_list;
+
+                  for(i = 0; i < years.length; i++) {
+                    $('#year-container').append('<div class="year-selector not-selected-button">'+years[i]+'</div>');
+                  };
+
+                  for(i = 0; i < months.length; i++) {
+                    $('#month-container').append('<div class="month-selector not-selected-button">'+months[i]+'</div>');
+                  };
+
+                },
+        error: function(error_data){
+          console.log("error")
+                }
+    });
+    //This request passes the yearly summary salesperson data to the dashboard template
+    $.ajax({
+      method: 'GET',
+      url: 'salesperson_yearly/',
+      data: {
+             'year': defaultYear
+             },
+      success: function(data){
+                  yearlySummarySalesPersonChart(data)
+                },
+        error: function(error_data){
+          console.log("error")
+                }
+    });
+
+    //This request passes the monthly data to the dashboard template
+    $.ajax({
+      method: 'GET',
+      url: 'monthly_table/',
+      data: {
+             'year': defaultYear
+             },
+      success: function(data){
+                  monthlyTable(data)
+                },
+        error: function(error_data){
+          console.log("error")
+                }
+    });
+
+
+    $.ajax({
+        method: 'GET',
+        url: 'customer_yearly/',
+        data: {
+               'year': defaultYear
+               },
+        success: function(data){
+                    customerChartYearly(data)
+                  },
+          error: function(error_data){
+                    console.log("error")
+                  }
+    });
+
+    $.ajax({
+        method: 'GET',
+        url: 'product_yearly/',
+        data: {
+               'year': defaultYear
+               },
+        success: function(data){
+                    productChartYearly(data)
+                  },
+          error: function(error_data){
+                    console.log("error")
+                  }
+    });
+
+// Click event to change the data based on the selected year
+    $('#year-container').on('click', '.year-selector', function() {
+
+      var year = $(this).text();
+
+      $('.year-selector').removeClass('selected-button');
+      $('.year-selector').addClass('not-selected-button');
+      $(this).toggleClass('not-selected-button');
+      $(this).toggleClass('selected-button');
+      d3.select('#svg-yearlysummary').remove();
+      d3.select('#svg-salespersonsummary').remove();
+      d3.select('#svg-yearlycustomer').remove();
+      d3.select('#svg-product-yearly').remove();
+
+      //This request passes the monthly data to the dashboard template
+      $.ajax({
+        method: 'GET',
+        url: 'monthly_table/',
+        data: {
+             'year': year
+             },
+        success: function(data){
+                  monthlyTable(data)
+                },
+        error: function(error_data){
+          console.log("error")
+                }
+    });
+
+      $.ajax({
+        method: 'GET',
+        url: url,
+        data: {
+             'year': year
+             },
+        success: function(data){
+                  yearlySummaryBarChart(data);
+                  console.log(data.distinct_months_list);
+                  var months = data.distinct_months_list;
+                  $('.month-selector').remove()
+
+                  for(i = 0; i < months.length; i++) {
+                    $('#month-container').append('<div class="month-selector not-selected-button">'+months[i]+'</div>');
+                  };
+
+                },
+        error: function(error_data){
+                  console.log("error")
+                }
+      });
+
+      $.ajax({
+        method: 'GET',
+        url: 'salesperson_yearly/',
+        data: {
+               'year': year
+               },
+        success: function(data){
+                    yearlySummarySalesPersonChart(data)
+                  },
+          error: function(error_data){
+                    console.log("error")
+                  }
+      });
+
+      $.ajax({
+        method: 'GET',
+        url: 'customer_yearly/',
+        data: {
+               'year': year
+               },
+        success: function(data){
+                    customerChartYearly(data)
+                  },
+          error: function(error_data){
+                    console.log("error")
+                  }
+      });
+
+      $.ajax({
+        method: 'GET',
+        url: 'product_yearly/',
+        data: {
+               'year': year
+               },
+        success: function(data){
+                    productChartYearly(data)
+                  },
+        error: function(error_data){
+                    console.log("error")
+                  }
+      });
+
+    });
+
+
+// Click event to change the data based on the selected month
+     $('#month-container').on('click', '.month-selector', function() {
+
+      $('.month-selector').removeClass('selected-button');
+      $('.month-selector').addClass('not-selected-button');
+      $(this).toggleClass('not-selected-button');
+      $(this).toggleClass('selected-button');
+     });
+
+
+  })
+
+</script>
+
+{% endblock %}
+
+
+{% block content %}
+  <div id="dashboard-container">
+      <div id="dashboard-container-box1" class="dashboard-box">
+        <div id="yearlysummary" class="dashboard-box-section"></div>
+        <div  id="salespersonsummary" class="dashboard-box-section"></div>
+      </div>
+
+      <div id="dashboard-container-box2" class="dashboard-box">
+
+        <div id="main-title-wrapper" class="dashboard-box-section">
+          <span id="main-dashboard-title"></span>
+          <span>Summary Dashboard</span>
+        </div>
+
+        <div  id="monthlytable" class="dashboard-box-section">
+          <div id="monthlytable-wrapper">
+            <div class="monthlytable-label-row">
+              <div class="monthlytable-label-cell">
+                <span></span>
+              </div>
+            </div>
+            <div class="monthlytable-gm-row">
+              <div class="monthlytable-datatype"><span></span></div>
+              <div class="monthlytable-gm-cell"><span>Actual</span></div>
+              <div class="monthlytable-gm-cell"><span>MoM</span></div>
+              <div class="monthlytable-gm-cell"><span>YoY</span></div>
+            </div>
+            <div class="monthlytable-rev-row">
+              <div class="monthlytable-datatype"><span>Rev</span></div>
+              <div class="monthlytable-rev-act"><span></span></div>
+              <div class="monthlytable-rev-mom"><span></span></div>
+              <div class="monthlytable-rev-yoy"><span></span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="dashboard-box-section">
+          <div id="year-container"> </div>
+        </div>
+
+
+      </div>
+      <div id="dashboard-container-box3" class="dashboard-box">
+        <div id="customer-yearly" class="dashboard-box-section"></div>
+        <div id="product-yearly" class="dashboard-box-section"></div>
+      </div>
+
+  </div>
+  <div id="sub-dashboard-wrapper">
+    <a href='#'><div id="close-sub-window"><i class="fas fa-window-close"></i></div></a>
+    <div id="dashboard-container2">
+      <div class="sub-box-container">
+        <div class="sub-box">
+          <div class="sub-box-title1"></div>
+          <div class="sub-box-content1"></div>
+        </div>
+        <div class="sub-box">
+          <div class="sub-box-title2"></div>
+          <div class="sub-box-content2"></div>
+        </div>
+      </div>
+      <div class="sub-box-container">
+        <div class="sub-box">
+          <div class="sub-dashboard-title"><span></span></div>
+        </div>
+        <div class="sub-box">
+          <div class="sub-box-title3"></div>
+          <div class="sub-box-content3"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
